@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+    <!--读取db.properties -->
+    <context:property-placeholder location="classpath:db.properties"/>
+    <!--配置数据源-->
+    <bean id="dataSource"
+          class="com.alibaba.druid.pool.DruidDataSource">
+        <!--数据库驱动-->
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <!--连接数据库的url-->
+        <property name="url" value="${jdbc.url}"/>
+        <!--连接数据库的用户名-->
+        <property name="username" value="${jdbc.username}"/>
+        <!--连接数据库的密码-->
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+<!--    &lt;!&ndash;事务管理器&ndash;&gt;-->
+<!--    <bean id="transactionManager"-->
+<!--          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">-->
+<!--        &lt;!&ndash;数据源&ndash;&gt;-->
+<!--        <property name="dataSource" ref="dataSource"/>-->
+<!--    </bean>-->
+<!--    &lt;!&ndash;通知&ndash;&gt;-->
+<!--    <tx:advice id="txAdvice" transaction-manager="transactionManager">-->
+<!--        <tx:attributes>-->
+<!--            &lt;!&ndash;传播行为&ndash;&gt;-->
+<!--            <tx:method name="save*" propagation="REQUIRED"/>-->
+<!--            <tx:method name="insert*" propagation="REQUIRED"/>-->
+<!--            <tx:method name="add*" propagation="REQUIRED"/>-->
+<!--            <tx:method name="create*" propagation="REQUIRED"/>-->
+<!--            <tx:method name="delete*" propagation="REQUIRED"/>-->
+<!--            <tx:method name="update*" propagation="REQUIRED"/>-->
+<!--            <tx:method name="find*" propagation="SUPPORTS" read-only="true"/>-->
+<!--            <tx:method name="select*" propagation="SUPPORTS" read-only="true"/>-->
+<!--            <tx:method name="get*" propagation="SUPPORTS" read-only="true"/>-->
+<!--        </tx:attributes>-->
+<!--    </tx:advice>-->
+<!--    &lt;!&ndash;切面&ndash;&gt;-->
+<!--    <aop:config>-->
+<!--        <aop:advisor advice-ref="txAdvice"-->
+<!--                     pointcut="execution(* com.itheima.core.service.*.*(..))"/>-->
+<!--    </aop:config>-->
+    <!--配置MyBatis的工厂-->
+    <bean class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--数据源-->
+        <property name="dataSource" ref="dataSource"/>
+        <!--配置MyBatis的核心配置文件所在位置-->
+        <property name="configLocation" value="classpath:mybatis.xml"/>
+        <!--映射文件位置-->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
+        <!--实体类别名-->
+        <property name="typeAliasesPackage" value="com.yunpan.achengovo.entity"/>
+    </bean>
+    <!--接口开发，扫描mapper包，写在此包下的接口即可被扫描到-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.yunpan.achengovo.mapper"/>
+    </bean>
+
+<!--    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">-->
+<!--        <property name="basePackage" value="com.itheima.core.dao"/>-->
+<!--    </bean>-->
+    <!--配置扫描@service注解-->
+    <context:component-scan base-package="com.yunpan.achengovo.service"/>
+</beans>

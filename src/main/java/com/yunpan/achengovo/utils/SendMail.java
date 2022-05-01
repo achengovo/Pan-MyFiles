@@ -1,11 +1,10 @@
 package com.yunpan.achengovo.utils;
 
-import java.util.Properties;
-
 import javax.mail.*;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.util.Properties;
 
 public class SendMail {
 
@@ -52,7 +51,7 @@ public class SendMail {
     }
 
     //发送网络邮箱服务器邮件
-    public static void sendNetMail(String email, String emailMsg,String Subject)
+    public static void sendNetMail(String email, String emailMsg, String Subject)
             throws AddressException, MessagingException {
         //创建配置对象
         Properties props = new Properties();
@@ -68,7 +67,7 @@ public class SendMail {
         Authenticator auth = new Authenticator() {
             public PasswordAuthentication getPasswordAuthentication() {
                 //设置发送人的帐号和密码
-                return new PasswordAuthentication("achengovo@qq.com", "ughzgnzujdfodgcg");
+                return new PasswordAuthentication("achengovo@qq.com", "achengovopassword");
             }
         };
 

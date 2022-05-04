@@ -131,7 +131,7 @@ var Main = {
                     this.dirList.push(e)
                 }
                 this.getFilesByDir();
-            } else if (e.fileType == 'pic' || e.fileType == 'video' || e.fileType == 'pdf') {
+            } else if (e.fileType == 'pic' || e.fileType == 'video') {
                 //图片
                 this.$alert('<embed src="' + url + '" style="max-height: 80vh;max-width:100%;min-height: 50vh;width: 100%;"></embed>', filename, {
                     dangerouslyUseHTMLString: true,
@@ -180,6 +180,9 @@ var Main = {
                 }).catch((err) => {
                     console.log(err)
                 });
+            } else if (e.fileType == 'pdf') {
+                //PDF
+                window.open(url)
             } else {
                 this.$notify({
                     title: '警告',

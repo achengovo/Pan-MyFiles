@@ -131,7 +131,7 @@ var Main = {
                     this.dirList.push(e)
                 }
                 this.getFilesByDir();
-            } else if (e.fileType == 'pic' || e.fileType == 'video') {
+            } else if (e.fileType == 'pic' || e.fileType == 'video' || e.fileType == 'pdf') {
                 //图片
                 this.$alert('<embed src="' + url + '" style="max-height: 80vh;max-width:100%;min-height: 50vh;width: 100%;"></embed>', filename, {
                     dangerouslyUseHTMLString: true,

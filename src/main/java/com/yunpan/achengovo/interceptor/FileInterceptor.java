@@ -30,8 +30,6 @@ public class FileInterceptor implements HandlerInterceptor {
                 url = String.valueOf(url.split("/")[0]);
                 String userId = String.valueOf(user.getUserId());
                 if (userId.equals(url)) {
-//                chain.doFilter(req, res);
-                    System.out.println("通过");
                     return true;
                 }
             }

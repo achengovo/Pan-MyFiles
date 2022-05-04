@@ -30,7 +30,7 @@ public class judgeFileType {
                 return "pdf";
             } else if (judgeNameEndType(new String[]{"jpg", "jpeg", "png", "ico", "gif"}, fileNameEnd)) {
                 return "pic";
-            }else if(judgeNameEndType(new String[]{"txt","xml","html","js","css"},fileNameEnd)){
+            } else if (judgeNameEndType(new String[]{"txt", "xml", "html", "js", "css", "py", "json", "java"}, fileNameEnd)) {
                 return "text";
             }
         }

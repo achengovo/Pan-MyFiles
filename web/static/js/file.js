@@ -111,17 +111,18 @@ var Main = {
             this.isCollapse = bool
         },
         //点击左侧菜单
-        clickMenu(e){
+        clickMenu(e) {
             console.log(e)
-            if(e==2){
-                window.location.href="file"
-            }else if(e==3){
-                window.location.href="user"
+            if (e == 2) {
+                window.location.href = "file"
+            } else if (e == 3) {
+                window.location.href = "user"
             }
         },
         //文件预览
         doPriveFile(e) {
-            var url = 'view?userFileId=' + e.userFileId + ''
+            console.log(e)
+            var url = e.fileLocation + ''
             filename = e.userFileName
             //目录
             if (e.fileType == 'dir') {
@@ -130,19 +131,19 @@ var Main = {
                     this.dirList.push(e)
                 }
                 this.getFilesByDir();
-            } else if (e.fileType == 'pic') {
+            } else if (e.fileType == 'pic' || e.fileType == 'video') {
                 //图片
-                this.$alert('<img src="' + url + '" style="max-height: 80vh;max-width:100%;">', filename, {
+                this.$alert('<embed src="' + url + '" style="max-height: 80vh;max-width:100%;min-height: 50vh;width: 100%;"></embed>', filename, {
                     dangerouslyUseHTMLString: true,
                     center: true,
                     showClose: true,
                     showCancelButton: false,
                     showConfirmButton: false,
-                    customClass:"my-el-message-box"
+                    customClass: "my-el-message-box"
                 }).catch((err) => {
                     console.log(err)
                 });
-            }  else if (e.fileType == 'text') {
+            } else if (e.fileType == 'text') {
                 //文本
                 axios({url: url}).then((res) => {
                     console.log(res.data)
@@ -153,7 +154,7 @@ var Main = {
                         showClose: true,
                         showCancelButton: false,
                         showConfirmButton: false,
-                        customClass:"my-el-message-box"
+                        customClass: "my-el-message-box"
                     }).catch((err) => {
                         console.log(err)
                     });
@@ -207,8 +208,8 @@ var Main = {
             }
         },
         //重命名选中文件
-        reNameList(){
-            var file=this.multipleSelection[0]
+        reNameList() {
+            var file = this.multipleSelection[0]
             this.$prompt('请输文件名', '重命名', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -379,9 +380,9 @@ var Main = {
             if (e == 'loginOut') {
                 console.log("退出登录")
                 this.loginOut()
-            }else if(e=='user'){
+            } else if (e == 'user') {
                 console.log("个人中心")
-                window.location.href="user"
+                window.location.href = "user"
             }
         },
         change(limit) {

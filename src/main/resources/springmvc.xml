@@ -10,15 +10,13 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context-4.3.xsd"
 >
-    <!--加载属性文件-->
-    <!--    <context:property-placeholder-->
-    <!--        location="classpath:resource.properties"/>-->
     <!--配置扫描器-->
     <context:component-scan base-package="com.yunpan.achengovo.controller"/>
     <!--注解驱动：配置处理器映射器和适配器-->
     <mvc:annotation-driven/>
     <!--配置静态资源的访问映射，此配置中的文件，并不被前端控制器拦截-->
     <mvc:resources mapping="/static/**" location="/static/"/>
+    <mvc:resources mapping="/upload/**" location="/upload/"/>
 
     <!--配置视图解释器-->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -32,15 +30,6 @@
         <!-- 上传文件的编码 -->
         <property name="defaultEncoding" value="UTF-8"></property>
     </bean>
-
-    <!--    <bean id="simpleMailMessage" class="org.springframework.mail.SimpleMailMessage">-->
-    <!--        <property name="from" value="${mail.from}" />-->
-    <!--        <property name="subject" value="${mail.subject}" />-->
-    <!--        <property name="to" value="${mail.to}" />-->
-    <!--        &lt;!&ndash;-->
-    <!--        <property name="text" value="邮件内容" />-->
-    <!--        &ndash;&gt;-->
-    <!--    </bean>-->
     <!--配置登录拦截器-->
     <mvc:interceptors>
         <mvc:interceptor>
@@ -49,24 +38,17 @@
                 1.排除静态资源的路径
             -->
             <mvc:exclude-mapping path="/static/**"/>
+            <mvc:exclude-mapping path="/upload/**"/>
             <!--
                 2、排除登录校验的路径
             -->
             <mvc:exclude-mapping path="/login"/>
             <bean class="com.yunpan.achengovo.interceptor.LoginInterceptor"/>
         </mvc:interceptor>
+        <!--拦截upload目录访问-->
+        <mvc:interceptor>
+            <mvc:mapping path="/upload/**"/>
+            <bean class="com.yunpan.achengovo.interceptor.FileInterceptor"/>
+        </mvc:interceptor>
     </mvc:interceptors>
-    <!--    <bean id="multipartResolver"-->
-    <!--          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">-->
-    <!--        &lt;!&ndash;上传文件的最大大小&ndash;&gt;-->
-    <!--        <property name="maxUploadSize" value="17367648787"></property>-->
-    <!--       &lt;!&ndash; 上传文件的编码 &ndash;&gt;-->
-    <!--        <property name="defaultEncoding" value="UTF-8"></property>-->
-    <!--    </bean>-->
-    <!--    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">-->
-    <!--        &lt;!&ndash;文件编码&ndash;&gt;-->
-    <!--        <property name="defaultEncoding" value="UTF-8"/>-->
-    <!--        &lt;!&ndash;最大文件大小&ndash;&gt;-->
-    <!--        <property name="maxUploadSize" value="9999999"/>-->
-    <!--    </bean>-->
 </beans>

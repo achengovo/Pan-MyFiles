@@ -3,11 +3,7 @@ package com.yunpan.achengovo.controller;
 import com.yunpan.achengovo.entity.User;
 import com.yunpan.achengovo.entity.UserFile;
 import com.yunpan.achengovo.service.FileService;
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -136,27 +132,8 @@ public class FileController {
         UserFile userFile = new UserFile();
         userFile.setDir(dir);
         userFile.setUserId(user.getUserId());
-        System.out.println(userFile);
+//        System.out.println(userFile);
         return fileService.getFileByDir(userFile);
-    }
-
-    @ResponseBody
-    @RequestMapping("/view")
-    public ResponseEntity<byte[]> view(@RequestParam("userFileId") Integer userFileId, HttpServletRequest request, HttpSession session, HttpServletResponse response) throws IOException {
-        User user = (User) session.getAttribute("USER_SESSION");
-        UserFile userFile = new UserFile();
-        userFile.setUserFileId(userFileId);
-        userFile.setUserId(user.getUserId());
-        UserFile userFile1 = new UserFile();
-        userFile1 = fileService.getFileByUserFileId(userFile);
-//        String path="D://桌面/upload/"+userFile1.getFileLocation();
-        String path = request.getServletContext().getRealPath("/upload/");
-        File file = new File(path + File.separator + userFile1.getFileLocation());
-        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentDispositionFormData("attachment", this.getEncodeName(request, userFile1.getUserFileName()));
-//        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.OK);
-
     }
 
     @RequestMapping("/download")
@@ -167,19 +144,10 @@ public class FileController {
         userFile.setUserId(user.getUserId());
         UserFile userFile1 = new UserFile();
         userFile1 = fileService.getFileByUserFileId(userFile);
-//        String path="D://桌面/upload/"+userFile1.getFileLocation();
-        String path = request.getServletContext().getRealPath("/upload/");
-//        File file = new File(path + File.separator + userFile1.getFileLocation());
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentDispositionFormData("attachment", this.getEncodeName(request, userFile1.getUserFileName()));
-//        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-//        return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.OK);
-
-
-        String filePath = path + File.separator + userFile1.getFileLocation();
+        String path = request.getServletContext().getRealPath(userFile1.getFileLocation());
         String fileName = URLEncoder.encode(userFile1.getUserFileName().trim(), "UTF-8");
         response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
-        InputStream is = new FileInputStream(filePath);
+        InputStream is = new FileInputStream(path);
 
         int read = 0;
         byte[] bytes = new byte[200 * 1024];
@@ -215,12 +183,11 @@ public class FileController {
      */
     @ResponseBody
     @RequestMapping(value = "/toUpload", method = RequestMethod.POST)
-    public String upload(
+    public String toUpload(
             @RequestParam("uploadfile") List<MultipartFile> uploadfile,
             @RequestParam("nowDirId") String nowDirId,
             HttpServletRequest request, HttpSession session) {
         User user = (User) session.getAttribute("USER_SESSION");
-//        System.out.println(name);
         System.out.println(nowDirId);
         //判断上传文件是否存在
         if (!uploadfile.isEmpty() && uploadfile.size() > 0) {
@@ -230,8 +197,8 @@ public class FileController {
                 //上传文件的原始名称
                 String originalFilename = file.getOriginalFilename();
                 //设置上传文件的保存地址目录
-//                String dirPath = "D://桌面/upload/";
-                String dirPath = request.getServletContext().getRealPath("/upload/");
+                String savePath = "upload/" + user.getUserId() + "/";
+                String dirPath = request.getServletContext().getRealPath(savePath);
                 File filePath = new File(dirPath);
                 //如果保存文件的地址不存在就先创建目录
                 if (!filePath.exists()) {
@@ -245,13 +212,12 @@ public class FileController {
                     userFile.setUserFileName(originalFilename);
                     userFile.setUserId(user.getUserId());
                     userFile.setFileType(judgeType(originalFilename));
-                    userFile.setFileLocation(newFilename);
+                    userFile.setFileLocation(savePath + newFilename);
                     userFile.setDir(nowDirId);
                     userFile.setUserFileSize(String.valueOf(file.getSize()));
                     if (fileService.insertToUserFiles(userFile) == 0) {
                         return "error";
                     }
-                    ;
                 } catch (Exception e) {
                     e.printStackTrace();
                     return "error";

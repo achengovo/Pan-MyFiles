@@ -268,11 +268,11 @@ public class UserController {
                 newFilename = UUID.randomUUID() + "_" + originalFilename;
                 try {
                     file.transferTo(new File(dirPath + newFilename));
+                    user.setUserAvatar(newFilename);
+                    if (userService.uploadAvatar(user) == 0) {
+                        return "error";
+                    }
                     return newFilename;
-//                    user.setUserAvatar(newFilename);
-//                    if(userService.uploadAvatar(user)==0){
-//                        return "error";
-//                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     return "error";

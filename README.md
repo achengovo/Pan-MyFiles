@@ -25,7 +25,8 @@ Spring MVC、SSM、Vue、Element UI、MySQL
 
 1. 导入数据库sql文件，修改db.properties中数据库用户名、密码
 2. 修改SendMail.java中的邮箱和授权码
-3. 在Tomcat中运行
+3. 如需强制HTTPS，修改去除web.xml中的注释即可，SSL证书需自行在Tomcat中配置
+4. 在Tomcat中运行
 
 ## 功能说明
 

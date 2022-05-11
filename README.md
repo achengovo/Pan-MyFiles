@@ -10,6 +10,8 @@ GitHub:[https://github.com/achengovo/Pan-MyFiles](https://github.com/achengovo/P
 
 [https://pan.achengovo.com](https://pan.achengovo.com)
 
+预览账号：test 密码：test
+
 ## 介绍
 
 Java web课程设计项目、Spring MVC、SSM、Vue、Element UI

@@ -131,7 +131,7 @@ var Main = {
                     this.dirList.push(e)
                 }
                 this.getFilesByDir();
-            } else if (e.fileType == 'pic' || e.fileType == 'video') {
+            } else if (e.fileType == 'pic') {
                 //图片
                 this.$alert('<embed src="' + url + '" style="max-height: 80vh;max-width:100%;min-height: 50vh;width: 100%;"></embed>', filename, {
                     dangerouslyUseHTMLString: true,
@@ -163,6 +163,27 @@ var Main = {
                 //音频
                 console.log(filename)
                 this.$alert('<video style="max-height: 80vh;width:100%;max-width:100%;height:35px;" src="' + url + '" controls="controls">' +
+                    '您的浏览器不支持 video 标签。' +
+                    '</video>', filename, {
+                    dangerouslyUseHTMLString: true,
+                    center: true,
+                    showClose: true,
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    beforeClose: (action, instance, done) => {
+                        var myVideo = document.getElementsByTagName('video')[0];   //获取视频video
+                        if (!myVideo.paused) {
+                            myVideo.pause();
+                        }
+                        done();
+                    }
+                }).catch((err) => {
+                    console.log(err)
+                });
+            } else if (e.fileType == 'video') {
+                //视频
+                console.log(filename)
+                this.$alert('<video style="width: 100%;height: 100%;" src="' + url + '" controls="controls">' +
                     '您的浏览器不支持 video 标签。' +
                     '</video>', filename, {
                     dangerouslyUseHTMLString: true,
